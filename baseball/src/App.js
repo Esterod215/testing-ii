@@ -1,28 +1,55 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Dashboard from './At-Bat/Dashboard';
+import Display from './At-Bat/Display';
+
 import './App.css';
+import { exists } from 'fs';
+import { endianness } from 'os';
+
 
 class App extends Component {
+  state = {
+    ball:0,
+    strike:0,
+    
+  };
+  
+  hit = () =>{
+    this.setState({ball:0,strike:0});
+  }
+  
+  miss = () => {
+    if(this.state.strike >= 2){
+      this.setState({ball:0,strike:0});
+    }else{
+    this.setState({strike: this.state.strike +1})
+    }
+  }
+
+  foulBall = () => {
+    if(this.state.strike < 2){
+      this.setState({strike:this.state.strike +1})
+    }else{
+      return;
+    }
+  }
+  Ball = () => {
+    if(this.state.ball >= 3){
+      this.setState({ball:0,strike:0})
+    }else{
+      this.setState({ball:this.state.ball+1})
+    }
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Display ball={this.state.ball} strike={this.state.strike}/>
+        <Dashboard ball={this.state.ball} strike={this.state.strike} hit={this.hit} miss={this.miss} foulBall={this.foulBall} Ball={this.Ball}/>
       </div>
     );
   }
+
 }
 
 export default App;
